@@ -1,6 +1,8 @@
 import dotenv from "dotenv"
-import { DEFAULT_CIPHERS } from "node:tls"
+import dns from "dns"
 
+dns.setDefaultResultOrder("ipv4first");
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 dotenv.config()
 
 const config = {
