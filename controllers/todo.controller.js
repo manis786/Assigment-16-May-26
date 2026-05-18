@@ -93,4 +93,25 @@ res.status(400).json({
 })
     }
 }
-export { getAllTodos, addTodos, getTodobyId, updateTodobyId }
+const deleteTodobyId = async(req,res)=>{
+    try {
+const { todoId } = req.params
+const response = await Todos.findByIdAndDelete(todoId)
+
+res.status(200).json({
+    status : true,
+    message: "Todos Deleted Successfully",
+    data : null
+})
+
+
+} catch (error) {
+        console.log(`Error While Deleting your Data ${error}`);
+        res.status(400).json({
+            status:false,
+            message:"Error While Deleting Data",
+            data : null
+        })
+    }
+}
+export { getAllTodos, addTodos, getTodobyId, updateTodobyId, deleteTodobyId }
