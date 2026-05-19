@@ -4,6 +4,7 @@ import Todos from "../models/todos.models.js";
 const getAllTodos = async (req, res) => {
     try {
         const todos = await Todos.find()
+
         res.status(200).json({
             status: true,
             message: "Todos Fetched Succssefully",
@@ -23,6 +24,7 @@ const getAllTodos = async (req, res) => {
 const addTodos = async (req, res) => {
     try {
         const respone = await Todos.create(req.body)
+
         console.log(`New Todo Created ${req.body}`)
         res.status(200).json({
             status: true,
@@ -76,42 +78,49 @@ const updateTodobyId = async (req, res) => {
     try {
         const { todoId } = req.params
         const { title, description } = req.body;
+        if (!title || !description) {
+            res.status(400).json({
+                status: false,
+                message: "Error While Updating your Request",
+                data: null
+            })
+        }
         const updateTodo = await Todos.findByIdAndUpdate(todoId, {
             title,
             description
         }, { new: true })
         res.status(200).json({
-            status :true,
+            status: true,
             message: "Data Updated Successfully",
-            data : updateTodo
+            data: updateTodo
         })
     } catch (error) {
-res.status(400).json({
-    status : false,
-    message:"Error While Updating your Request",
-    data:null
-})
+        res.status(400).json({
+            status: false,
+            message: "Error While Updating your Request",
+            data: null
+        })
     }
 }
 // Delete Todos by ID
-const deleteTodobyId = async(req,res)=>{
+const deleteTodobyId = async (req, res) => {
     try {
-const { todoId } = req.params
-const response = await Todos.findByIdAndDelete(todoId)
+        const { todoId } = req.params
+        const response = await Todos.findByIdAndDelete(todoId)
 
-res.status(200).json({
-    status : true,
-    message: "Todos Deleted Successfully",
-    data : null
-})
+        res.status(200).json({
+            status: true,
+            message: "Todos Deleted Successfully",
+            data: null
+        })
 
 
-} catch (error) {
+    } catch (error) {
         console.log(`Error While Deleting your Data ${error}`);
         res.status(400).json({
-            status:false,
-            message:"Error While Deleting Data",
-            data : null
+            status: false,
+            message: "Error While Deleting Data",
+            data: null
         })
     }
 }
