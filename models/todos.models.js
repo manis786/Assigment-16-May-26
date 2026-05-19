@@ -1,10 +1,10 @@
 import mongoose from "mongoose"
 const todoSchema = new mongoose.Schema({
     title :{
-        type: "string"
+        type: String
     },
     description :{
-        type : "string"
+        type : String
     }
 })
 const Todos = mongoose.model("Todos",todoSchema)
