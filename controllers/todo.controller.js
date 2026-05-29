@@ -1,25 +1,21 @@
+import { errorRes, successRes } from "../libs/responseHandler.js";
 import Todos from "../models/todos.models.js";
 
 // Get All Todos Method
+
+
 const getAllTodos = async (req, res) => {
     try {
         const todos = await Todos.find()
+        successRes(res, 200, true, "Todos Fetched", todos)
 
-        res.status(200).json({
-            status: true,
-            message: "Todos Fetched Succssefully",
-            data: todos
-        })
         console.log("Todos Fetched")
     } catch (error) {
-        res.status(400).json({
-            status: false,
-            message: "Eroor while getiing Todos",
-            data: null
-        })
-        console.log("Error while Fetching Data ", error)
+        errorRes(res, 400, false, error.message || "Something went wrong, please try later!", null)
+
     }
 }
+
 // Add Todos Method
 const addTodos = async (req, res) => {
     try {
@@ -54,11 +50,9 @@ const getTodobyId = async (req, res) => {
 
             })
         }
-        res.status(200).json({
-            status: true,
-            message: "Todos Fetched by ID",
-            data: todoData
-        })
+
+        successRes(res, 200, true, "All Todos are Fetched Successfully")
+
         console.log("Parameter", todoId);
     } catch (error) {
         console.log(`Error While Gettinf Data by ID ${error}`);
