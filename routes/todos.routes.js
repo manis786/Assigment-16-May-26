@@ -1,4 +1,4 @@
-import express, { Router } from "express"
+import express from "express"
 import Todos from "../models/todos.models.js"
 import { addTodos, getAllTodos, getTodobyId, updateTodobyId, deleteTodobyId} from "../controllers/todo.controller.js"
 
