@@ -1,12 +1,23 @@
 import { errorRes, successRes } from "../libs/responseHandler.js";
 import Todos from "../models/todos.models.js";
+import client from "../config/redis.js"
 
 // Get All Todos Method
 
 
 const getAllTodos = async (req, res) => {
     try {
+
+        const cacheData = await client.get("todos")
+
+if (cacheData){
+    console.log("Fethced Data from Cache")
+        return successRes(res,200,true,"todos Fetched",JSON.parse(cacheData))
+    
+}
+console.log("Data Fetched from Database")
         const todos = await Todos.find()
+         await client.set("todos", JSON.stringify(todos))
         successRes(res, 200, true, "Todos Fetched", todos)
 
         console.log("Todos Fetched")
@@ -47,27 +58,20 @@ const getTodobyId = async (req, res) => {
                 status: false,
                 message: "Error While Getting Todo by ID",
                 data: null
-
             })
         }
-
         successRes(res, 200, true, "All Todos are Fetched Successfully")
-
         console.log("Parameter", todoId);
     } catch (error) {
         console.log(`Error While Gettinf Data by ID ${error}`);
-
         res.status(400).json({
             status: false,
             message: "Error While Getting Todo by ID",
             data: null
-
         })
-
     }
 }
 // Update Todos by ID
-
 const updateTodobyId = async (req, res) => {
     try {
         const { todoId } = req.params
