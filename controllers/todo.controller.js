@@ -10,14 +10,14 @@ const getAllTodos = async (req, res) => {
 
         const cacheData = await client.get("todos")
 
-if (cacheData){
-    console.log("Fethced Data from Cache")
-        return successRes(res,200,true,"todos Fetched",JSON.parse(cacheData))
-    
-}
-console.log("Data Fetched from Database")
+        if (cacheData) {
+            console.log("Fethced Data from Cache")
+            return successRes(res, 200, true, "todos Fetched", JSON.parse(cacheData))
+
+        }
+        console.log("Data Fetched from Database")
         const todos = await Todos.find()
-         await client.set("todos", JSON.stringify(todos))
+        await client.set("todos", JSON.stringify(todos))
         successRes(res, 200, true, "Todos Fetched", todos)
 
         console.log("Todos Fetched")
@@ -33,11 +33,11 @@ const addTodos = async (req, res) => {
         const respone = await Todos.create(req.body)
 
         console.log(`New Todo Created ${req.body}`)
-        res.status(200).json({
-            status: true,
-            message: "New Line Added in Todos",
-            data: null
-        })
+        successRes(res, 200, true, "Todo Added", addTodos)
+
+        await client.del("todos")
+        await client.set("todos", JSON.stringify(todos))
+
     } catch (error) {
         console.log(`Error While Adding Todo ${error}`)
         res.status(400).json({
